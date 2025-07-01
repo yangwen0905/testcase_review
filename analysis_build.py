@@ -112,9 +112,9 @@ def call_claude_3_7(
     api_key: str,
     messages: List[Dict[str, str]],
     model: str = "claude-3-7-sonnet-latest",
-    max_tokens: int = 100,
+    max_tokens: int = 150,
     temperature: float = 0.7,
-    timeout: int = 30
+    timeout: int = 300
 ) -> Optional[str]:
     """
     调用 Claude 3.7 API 并返回模型输出的文本内容

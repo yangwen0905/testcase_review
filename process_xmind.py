@@ -56,10 +56,14 @@ def upload_file():
             with open("testcases.json", 'r', encoding='utf-8') as f:
                 json_content = f.read()
                 print(f"文件'{original_filename}'读取成功！")
+            
+            # 获取当前脚本所在目录
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+            json_file_path = os.path.join(current_dir, "testcases.json")
 
             # 调用AI分析函数
             print("开始AI分析...")
-            analysis_result = analyze_test_cases_from_json(json_content)
+            analysis_result = analyze_test_cases_from_json(json_file_path)
             print("✓ AI分析完成")
 
             # 返回分析结果页面，将表格HTML和分析结果传递给模板
