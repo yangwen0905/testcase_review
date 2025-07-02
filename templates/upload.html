@@ -2,9 +2,9 @@
 <html lang="zh-CN">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>测试用例分析</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>文件上传</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -18,40 +18,94 @@
 
     .container {
       background-color: #fff;
-      padding: 20px;
-      border-radius: 5px;
+      padding: 30px;
+      border-radius: 15px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       text-align: center;
+      width: 450px;
+    }
+
+    .file-input-container {
+      position: relative;
+      overflow: hidden;
+      text-align: left;
+      /* 文案左对齐 */
+      margin-bottom: 20px;
+      border-radius: 10px;
+      /* 完整边框（含左右）+ 极浅透明度 */
+      border-top: 1px solid rgba(195, 195, 195, 0.2);
+      border-bottom: 1px solid rgba(195, 195, 195, 0.2);
+      border-left: 1px solid rgba(195, 195, 195, 0.1);
+      border-right: 1px solid rgba(195, 195, 195, 0.1);
+      border-width: 2px;
+      /* 原 1px → 增大边框粗度 */
+      padding: 12px 10px;
+      /* 保留内边距防止文字贴着边框 */
+    }
+
+    .file-input-container input[type="file"] {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .file-label {
+      display: inline-block;
+      padding: 0 20px;
+      color: #007BFF;
+      cursor: pointer;
+      vertical-align: middle;
+      position: relative;
+    }
+
+    /* 竖线分隔符（淡色） */
+    .file-label::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 1px;
+      height: 16px;
+      background-color: rgba(195, 195, 195, 0.2);
+    }
+
+    .file-name {
+      display: inline-block;
+      color: #999;
+      vertical-align: middle;
+      margin-left: 10px;
+    }
+
+    .file-label,
+    .file-name {
+      font-size: 16px;
+      /* 原默认字号 → 增大提示文字 */
+    }
+
+    .upload-button {
+      display: inline-block;
+      padding: 13px 55px;
+      background: linear-gradient(to right, #3F8AE0, #5D9CEC);
+      color: #fff;
+      border: none;
+      border-radius: 25px;
+      font-size: 20px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .upload-button:hover {
+      background-color: #0056b3;
     }
 
     h1 {
-      color: #333;
-      margin-bottom: 20px;
-      margin-left: 20px;
-    }
-
-    .upload-form {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .upload-form input[type="file"] {
-      margin-bottom: 20px;
-    }
-
-    .upload-form input[type="submit"] {
-      background-color: #007BFF;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    .upload-form input[type="submit"]:hover {
-      background-color: #0056b3;
+      font-size: 30px;
+      /* 原默认字号 → 增大标题 */
     }
   </style>
 </head>
@@ -59,11 +113,24 @@
 <body>
   <div class="container">
     <h1>文件上传</h1>
-    <form class="upload-form" action="/upload" method="post" enctype="multipart/form-data">
-      <input type="file" name="test_cases" required>
-      <input type="submit" value="上传">
-    </form>
+    <div class="file-input-container">
+      <label class="file-label" for="fileInput">选择文件</label>
+      <span class="file-name" id="fileName">未选择任何文件</span>
+      <input type="file" id="fileInput" name="test_cases" required />
+    </div>
+    <button class="upload-button" onclick="uploadFile()">上传</button>
   </div>
+
+  <script>
+    document.getElementById('fileInput').addEventListener('change', function (event) {
+      const fileName = event.target.files[0] ? event.target.files[0].name : '未选择任何文件';
+      document.getElementById('fileName').textContent = fileName;
+    });
+
+    function uploadFile () {
+      alert('文件上传中...');
+    }
+  </script>
 </body>
 
 </html>
