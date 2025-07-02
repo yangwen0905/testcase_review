@@ -4,46 +4,6 @@ import requests
 from typing import List, Dict, Optional
 
 
-def analyze_test_cases(df):
-    """
-    使用CodeGeeX分析测试用例数据
-    """
-    # 构建分析提示词
-    prompt = f"""
-    作为资深测试工程师，请分析以下测试用例：
-    请从以下几个方面进行分析，重点检查功能逻辑：
-    1. 测试用例覆盖度分析
-    2. 测试用例设计质量评估
-    3. 逻辑漏洞（列出未覆盖场景）
-    4. 冗余检查
-    5. 改进建议
-    以表格形式回应
-
-
-    请提供结构化的分析报告。
-    """
-    # 从环境变量中获取 API 密钥
-    API_key = "sk-u_lipvztOq2z6n5ktVJv4A"
-    if not API_key:
-        raise ValueError("请设置环境变量 CLAUDE_API_KEY")
-
-    # 构造输入消息
-    msg = [
-        # {"role": "system", "content": "作为资深测试工程师，请分析以下测试用例"}
-        {"role": "user", "content": "作为资深测试工程师，请分析以下测试用例"}
-    ]
-
-    # 调用 API
-    ai_response = call_claude_3_7(API_key, msg)
-
-    # 输出结果
-    if ai_response:
-        print("AI 分析结果：\n", ai_response)
-        return ai_response
-    else:
-        print("未获得有效响应。")
-        return f"未获得有效响应。"   
-
 def analyze_test_cases_from_json(json_file_path: str):
     """
     从 JSON 文件中加载测试用例，并调用 Claude 3.7 进行分析

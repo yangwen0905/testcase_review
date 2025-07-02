@@ -6,6 +6,8 @@ import json
 import yaml
 
 """将XMind文件转换为json格式"""
+
+
 def transform_type_to_json(file_path):
     # 转换XMind为Python字典
     data = xmind_to_dict(file_path)
@@ -20,6 +22,8 @@ def transform_type_to_json(file_path):
 
 
 """将XMind文件转换为yaml格式"""
+
+
 def transform_type_to_yaml(file_path):
     # 转换XMind为Python字典
     data = xmind_to_dict(file_path)
@@ -32,8 +36,9 @@ def transform_type_to_yaml(file_path):
     return yaml_filename
 
 
-
 """根据json文件生成测试用例"""
+
+
 def build_test_case(scenario: str, prerequisite: str, steps: List[str], expected: List[str]) -> Dict:
     return {
         "test_case_name": scenario,
@@ -42,6 +47,7 @@ def build_test_case(scenario: str, prerequisite: str, steps: List[str], expected
         "steps": [{"description": s} for s in steps],
         "expected_results": [{"result": e} for e in expected]
     }
+
 
 def traverse_scenarios(nodes: List, results: List) -> None:
     for scenario_node in nodes:
@@ -98,17 +104,18 @@ def traverse_scenarios(nodes: List, results: List) -> None:
             if case:
                 results.append(case)
 
+
 def convert(input_file: str, output_file: str) -> None:
     with open(input_file, 'r', encoding='utf-8') as f:
         data = json.load(f)
-    
+
     # 获取根节点（跳过workbook层）
     root = data[0]["topic"]["topics"]
     test_cases = []
-    
+
     # 遍历所有场景节点
     traverse_scenarios(root, test_cases)
-    
+
     # 保存结果
     with open(output_file, 'w', encoding='utf-8') as f:
         json.dump(test_cases, f, ensure_ascii=False, indent=2)
