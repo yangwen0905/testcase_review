@@ -4,13 +4,106 @@
 <head>
   <meta charset="UTF-8">
   <title>测试用例分析结果</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+
+    .analysis-module {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .module-title {
+      color: #2980b9;
+      font-size: 1.3em;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 12px 15px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background: linear-gradient(to right, #3498db, #2980b9);
+      color: white;
+    }
+
+    tr:nth-child(even) {
+      background: #f9f9f9;
+    }
+
+    .critical {
+      color: #e74c3c;
+      font-weight: bold;
+    }
+
+    .note {
+      font-size: 0.95em;
+      color: #7f8c8d;
+      margin-top: 15px;
+    }
+
+    .summary {
+      background: #e8f5e9;
+      padding: 20px;
+      border-left: 5px solid #66bb6a;
+    }
+  </style>
 </head>
 
 <body>
 
+  <h1>{{ message }}</h1>
   <h2>测试用例分析结果</h2>
 
-  <pre>{{ content }}</pre>
+  <!-- 渲染模块 -->
+  {% if analysis_data.modules %}
+  {% for module in analysis_data.modules %}
+  <div class="analysis-module">
+    <div class="module-title">{{ module.title }}</div>
+    {% if module.type == "table" %}
+    {% if module.columns is defined and module.rows is defined %}
+    {% if module.columns|length > 0 and module.rows|length > 0 %}
+    <table>
+      <!-- 表格内容 -->
+    </table>
+    {% else %}
+    <p class="note">表格数据为空。</p>
+    {% endif %}
+    {% else %}
+    <p class="critical">表格字段缺失，请检查 AI 响应。</p>
+    {% endif %}
+    {% elif module.type == "list" %}
+    <!-- 列表渲染逻辑 -->
+    {% else %}
+    <p class="critical">未知模块类型：{{ module.type }}</p>
+    {% endif %}
+  </div>
+  {% endfor %}
+  {% else %}
+  <p class="critical">未获取到任何分析模块，请检查 AI 响应。</p>
+  {% endif %}
+
+  <!-- 渲染总结建议 -->
+  <div class="analysis-module summary">
+    <div class="module-title">总结建议</div>
+    <p>{{ analysis_data.summary|default("无总结建议") }}</p>
+  </div>
 
 </body>
 

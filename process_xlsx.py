@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template
-import pandas as pd # type: ignore
+import pandas as pd
 from werkzeug.utils import secure_filename
 import os
 from datetime import datetime
@@ -178,4 +178,3 @@ def call_codegeex_api(prompt):
 
 if __name__ == '__main__':
     app.run(debug=True)
-    
