@@ -1,3 +1,4 @@
+import json
 from flask import Flask, request, render_template
 import os
 from datetime import datetime
@@ -66,10 +67,16 @@ def upload_file():
             analysis_result = analyze_test_cases_from_json(json_file_path)
             print("✓ AI分析完成")
 
-            # 返回分析结果页面，将表格HTML和分析结果传递给模板
+            # ✅ 将 JSON 字符串转为 Python 字典
+            try:
+                analysis_data = json.loads(analysis_result)
+            except json.JSONDecodeError:
+                analysis_data = {"modules": [], "summary": "AI 响应格式错误"}
+
+            # 返回分析结果页面
             return render_template('analysis_result.html',
-                                   message=f"文件'{original_filename}'上传成功！",
-                                   content=analysis_result)
+                                  message=f"文件'{original_filename}'上传成功！",
+                                  analysis_data=analysis_data)
 
 
         except Exception as e:

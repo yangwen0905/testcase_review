@@ -4,13 +4,115 @@
 <head>
   <meta charset="UTF-8">
   <title>测试用例分析结果</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+
+    .analysis-module {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .module-title {
+      color: #2980b9;
+      font-size: 1.3em;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 12px 15px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background: linear-gradient(to right, #3498db, #2980b9);
+      color: white;
+    }
+
+    tr:nth-child(even) {
+      background: #f9f9f9;
+    }
+
+    .critical {
+      color: #e74c3c;
+      font-weight: bold;
+    }
+
+    .note {
+      font-size: 0.95em;
+      color: #7f8c8d;
+      margin-top: 15px;
+    }
+
+    .summary {
+      background: #e8f5e9;
+      padding: 20px;
+      border-left: 5px solid #66bb6a;
+    }
+  </style>
 </head>
 
 <body>
 
-  <h2>测试用例分析结果</h2>
+  <h2>{{ message }}</h2>
 
-  <pre>{{ content }}</pre>
+  <!-- 动态模块渲染 -->
+  {% for module in analysis_data.modules %}
+  <div class="analysis-module">
+    <h3 class="module-title">{{ module.title }}</h3>
+
+    {% if module.type == 'table' %}
+    <table>
+      <thead>
+        <tr>{% for col in module.columns %}<th>{{ col }}</th>{% endfor %}</tr>
+      </thead>
+      <tbody>
+        {% for row in module.rows %}
+        <tr>
+          {% for cell in row %}
+          <td>
+            {% if loop.index == module.columns|length %}
+            <span class="critical">{{ cell }}</span>
+            {% else %}
+            {{ cell }}
+            {% endif %}
+          </td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    {% elif module.type == 'list' %}
+    <ul>
+      {% for item in module.items %}
+      <li>{{ item }}</li>
+      {% endfor %}
+    </ul>
+
+    {% endif %}
+  </div>
+  {% endfor %}
+
+  <!-- 总结建议 -->
+  <div class="summary">
+    <h3>总结建议</h3>
+    <p>{{ analysis_data.summary }}</p>
+  </div>
 
 </body>
 

@@ -71,7 +71,23 @@ def analyze_test_cases_from_json(json_file_path: str):
     
     {test_cases_str}
     
-    请提供一份结构清晰、可操作性强的分析报告，以 Markdown 表格形式呈现。
+    请按照以下 JSON Schema 格式返回分析结果：
+
+    {{
+        "modules": [
+            {{
+                "title": "模块标题",
+                "type": "table|list",
+                "columns": ["列名1", "列名2", ...],
+                "rows": [["值1", "值2", ...], ...],
+                "items": ["条目1", "条目2", ...]
+            }},
+            ...
+        ],
+        "summary": "总结建议"
+    }}
+
+    请确保返回的 JSON 严格符合上述格式，不要包含其他内容。
     """
 
     # 步骤三：获取 API 密钥
@@ -102,10 +118,10 @@ def analyze_test_cases_from_json(json_file_path: str):
     # 步骤六：输出分析结果
     if ai_response:
         print("AI 分析结果：\n", ai_response)
-        return ai_response
+        return ai_response  # 直接返回 JSON 字符串
     else:
         print("未获得有效响应。")
-        return "未获得有效响应。"
+        return json.dumps({"modules": [], "summary": "未获得有效响应。"})
 
 
 def call_claude_3_7(
