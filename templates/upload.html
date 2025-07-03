@@ -107,6 +107,16 @@
       font-size: 30px;
       /* 原默认字号 → 增大标题 */
     }
+    /* 淡入淡出动画 */
+    /* .toast.show {
+    animation: fadeInOut 0.5s ease-in-out;
+    }
+
+    @keyframes fadeInOut {
+        0% { opacity: 0; transform: translateY(20px); }
+        50% { opacity: 1; transform: translateY(0); }
+        100% { opacity: 0; transform: translateY(-20px); }
+    } */
   </style>
 </head>
 
@@ -128,9 +138,98 @@
     });
 
     function uploadFile () {
-      alert('文件上传中...');
+        const fileInput = document.getElementById('fileInput');
+        const file = fileInput.files[0];
+    
+        if (!file) {
+            showToast("请选择一个文件！");
+            return;
+        }
+
+        const toast = document.getElementById("toast");
+        const message = document.getElementById("toast-message");
+
+        // 显示“上传中”提示
+        showToast("文件上传中...");
+
+        // 创建 FormData 对象
+        const formData = new FormData();
+        formData.append("test_cases", file);
+
+        // 发送 POST 请求到 Flask 后端
+        fetch('/upload', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('上传失败');
+            }
+            return response.text(); // 获取 HTML 响应内容
+        })
+        .then(html => {
+            // 隐藏“上传中”提示
+            showToast(""); 
+
+            // 直接替换当前页面内容（或跳转）
+            document.open();
+            document.write(html);
+            document.close();
+        })
+        .catch(error => {
+            console.error("上传出错:", error);
+            showToast("上传失败，请重试！");
+        });
+    }
+
+    // 自定义 Toast 显示函数
+    function showToast(messageText, type = "success") {
+        const toast = document.getElementById("toast");
+        const message = document.getElementById("toast-message");
+        message.textContent = messageText;
+        
+        if (messageText.trim() === "") {
+            toast.classList.remove("show");
+            return;
+        }
+        // 根据类型设置颜色
+        if (type === "error") {
+            toast.style.backgroundColor = "#f44336"; // 红色
+        } else {
+            toast.style.backgroundColor = "#4CAF50"; // 绿色
+        }
+        toast.classList.add("show");
+        setTimeout(() => {
+            toast.classList.remove("show");
+        }, 3000); // 3秒后自动消失
     }
   </script>
+  <!-- Toast 容器 -->
+  <div id="toast" class="toast">
+    <span id="toast-message">默认提示</span>
+  </div>
+
+<style>
+  /* Toast 样式 */
+  .toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #4CAF50;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 5px;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    z-index: 9999;
+    pointer-events: none;
+  }
+
+  .toast.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+</style>
 </body>
 
 </html>

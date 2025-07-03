@@ -80,7 +80,7 @@ def upload_file():
 
 
         except Exception as e:
-            return f"发生错误: {e}"
+            return f"发生错误: {e}", 500
 
     return "仅支持 .mm, .xmind 文件！"
 
