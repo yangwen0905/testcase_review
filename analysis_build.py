@@ -40,7 +40,7 @@ def analyze_test_cases_from_json(json_file_path: str):
                 "type": "table|list",
                 "columns": ["列名1", "列名2", ...],
                 "rows": [["值1", "值2", ...], ...],
-                "items": ["条目1", "条目2", ...]
+                "data": ["条目1", "条目2", ...]
             }},
             ...
         ],

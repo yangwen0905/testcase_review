@@ -71,24 +71,24 @@ def upload_file():
             try:
                 # ✅ 将 JSON 字符串转为 Python 字典
                 analysis_data = json.loads(analysis_result)
-                
+                print(analysis_data)
             except json.JSONDecodeError as e:
                 analysis_data = {"modules": [], "summary": "JSON 解析失败: " + str(e)}
+                
 
             # for module in analysis_data["modules"]:
             #     if module["type"] == "table":
-            #         for i, row in enumerate(module["rows"]):
-            #             module["rows"][i] = [cell.replace("\n", " ") for cell in row]
-            for module in analysis_data["modules"]:
-                if module["type"] == "table":
-                    module["columns"] = module.get("columns", [])
-                    module["rows"] = module.get("rows", [])
-                    # 额外校验：确保 rows 是列表
-                    if not isinstance(module["rows"], list):
-                        module["rows"] = [module["rows"]]
-            first_module = analysis_data["modules"][0]
-            print("表格列:", first_module["columns"])
-            print("表格行:", first_module["rows"])
+            #         # 确保 columns 和 rows 是列表
+            #         module["columns"] = module.get("columns", [])
+            #         module["rows"] = module.get("rows", [])
+            #         # 如果 rows 是嵌套列表（如 [[...]]），展平为 [...]
+            #         if isinstance(module["rows"], list) and all(isinstance(row, list) for row in module["rows"]):
+            #             module["rows"] = [item for sublist in module["rows"] for item in sublist]
+            #             print(module["rows"])
+
+            # first_module = analysis_data["modules"][0]
+            # print("表格列:", first_module["columns"])
+            # print("表格行:", first_module["rows"])
 
             # for module in analysis_data["modules"]:
             #     if module["title"] == "冗余测试用例分析":

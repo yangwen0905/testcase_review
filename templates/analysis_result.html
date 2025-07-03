@@ -80,7 +80,22 @@
     {% if module.columns is defined and module.rows is defined %}
     {% if module.columns|length > 0 and module.rows|length > 0 %}
     <table>
-      <!-- 表格内容 -->
+      <thead>
+        <tr>
+          {% for col in module.columns %}
+          <th>{{ col }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in module.rows %}
+        <tr>
+          {% for cell in row %}
+          <td>{{ cell }}</td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
     </table>
     {% else %}
     <p class="note">表格数据为空。</p>
@@ -90,6 +105,15 @@
     {% endif %}
     {% elif module.type == "list" %}
     <!-- 列表渲染逻辑 -->
+    {% for row in module.data %}
+    <table>
+      <tbody>
+        <tr>
+          <td>{{ row }}</td>
+        </tr>
+      </tbody>
+    </table>
+    {% endfor %}
     {% else %}
     <p class="critical">未知模块类型：{{ module.type }}</p>
     {% endif %}
@@ -106,5 +130,11 @@
   </div>
 
 </body>
+
+<script>
+  function showAlert() {
+    alert("你点击了按钮！");
+  }
+</script>
 
 </html>
