@@ -68,50 +68,41 @@
 
 <body>
 
-  <h2>{{ message }}</h2>
+  <h1>{{ message }}</h1>
+  <h2>测试用例分析结果</h2>
 
-  <!-- 动态模块渲染 -->
+  <!-- 渲染模块 -->
+  {% if analysis_data.modules %}
   {% for module in analysis_data.modules %}
   <div class="analysis-module">
-    <h3 class="module-title">{{ module.title }}</h3>
-
-    {% if module.type == 'table' %}
+    <div class="module-title">{{ module.title }}</div>
+    {% if module.type == "table" %}
+    {% if module.columns is defined and module.rows is defined %}
+    {% if module.columns|length > 0 and module.rows|length > 0 %}
     <table>
-      <thead>
-        <tr>{% for col in module.columns %}<th>{{ col }}</th>{% endfor %}</tr>
-      </thead>
-      <tbody>
-        {% for row in module.rows %}
-        <tr>
-          {% for cell in row %}
-          <td>
-            {% if loop.index == module.columns|length %}
-            <span class="critical">{{ cell }}</span>
-            {% else %}
-            {{ cell }}
-            {% endif %}
-          </td>
-          {% endfor %}
-        </tr>
-        {% endfor %}
-      </tbody>
+      <!-- 表格内容 -->
     </table>
-
-    {% elif module.type == 'list' %}
-    <ul>
-      {% for item in module.items %}
-      <li>{{ item }}</li>
-      {% endfor %}
-    </ul>
-
+    {% else %}
+    <p class="note">表格数据为空。</p>
+    {% endif %}
+    {% else %}
+    <p class="critical">表格字段缺失，请检查 AI 响应。</p>
+    {% endif %}
+    {% elif module.type == "list" %}
+    <!-- 列表渲染逻辑 -->
+    {% else %}
+    <p class="critical">未知模块类型：{{ module.type }}</p>
     {% endif %}
   </div>
   {% endfor %}
+  {% else %}
+  <p class="critical">未获取到任何分析模块，请检查 AI 响应。</p>
+  {% endif %}
 
-  <!-- 总结建议 -->
-  <div class="summary">
-    <h3>总结建议</h3>
-    <p>{{ analysis_data.summary }}</p>
+  <!-- 渲染总结建议 -->
+  <div class="analysis-module summary">
+    <div class="module-title">总结建议</div>
+    <p>{{ analysis_data.summary|default("无总结建议") }}</p>
   </div>
 
 </body>

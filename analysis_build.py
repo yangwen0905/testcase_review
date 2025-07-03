@@ -31,7 +31,7 @@ def analyze_test_cases_from_json(json_file_path: str):
     
     {test_cases_str}
     
-    请按照以下 JSON Schema 格式返回分析结果：
+    请按照以下 JSON Schema 格式返回分析结果，**仅输出 JSON 内容，不要包含任何 Markdown 格式或额外文本**。
 
     {{
         "modules": [
@@ -77,7 +77,7 @@ def analyze_test_cases_from_json(json_file_path: str):
 
     # 步骤六：输出分析结果
     if ai_response:
-        print("AI 分析结果：\n", ai_response)
+        # print("AI 分析结果：\n", ai_response)
         return ai_response  # 直接返回 JSON 字符串
     else:
         print("未获得有效响应。")
